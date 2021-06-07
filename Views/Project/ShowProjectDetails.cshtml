@@ -1,0 +1,54 @@
+﻿@model ProjectDto
+
+<h2 class="shadow text-capitalize text-center m-4">Project Details</h2>
+<h3 class="bg-light m-4" >Project Name : @Model.ProjectName</h3>
+
+@if (Model.ProjectIssues.Count() > 0)
+{
+    <h4 class="text-center">List of project issues</h4>
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-striped">
+            <tr>
+                <th>Issue Title</th>
+                <th>Status</th>
+                <th>Priority</th>
+                <th>Assignee</th>
+                <th>Date Created</th>
+                <th>Date Closed</th>
+            </tr>
+            <tbody>
+                @foreach (Issue issue in Model.ProjectIssues)
+                {
+                    <tr>
+                        <td>@issue.Title</td>
+                        <td>@issue.StatusName</td>
+                        <td>@issue.PriorityName</td>
+                        @if (issue.MemberId != null)
+                        {
+                            <td>@issue.MemberName</td>
+                        }
+                        else
+                        {
+                            <td>No one is assigned to this issue yet</td>
+                        }
+                        <td>@issue.DateCreated.ToShortDateString()</td>
+                        @if (issue.DateClosed != null)
+                        {
+                            <td>@issue.DateClosed.Value.ToShortDateString()</td>
+                        }
+                        else
+                        {
+                            <td>Issue not yet resolved</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else
+{
+    <h4>No Issue within Project</h4>
+}
+<h5><a class="btn btn-outline-primary"  asp-controller="Issue" asp-action="Create" asp-route-id="@Model.ProjectId">Add Issue</a></h5>
+

@@ -1,0 +1,72 @@
+﻿@model IssueViewModel
+
+<div class="m-2">
+    <h2 class="shadow text-capitalize text-center m-4">Issue</h2>
+    <h5 class="bg-@Model.Theme text-white text-center p-2">@Model.Action</h5>
+
+    <form asp-action="@Model.Action" method="post">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Issue.ProjectId"></label>
+            <input class="form-control" asp-for="Issue.ProjectId" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Issue.IssueId"></label>
+            <input class="form-control" asp-for="Issue.IssueId" readonly />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Issue.Title"></label>
+            <div>
+                <span asp-validation-for="Issue.Title" class="text-danger"></span>
+            </div>
+            <input class="form-control" asp-for="Issue.Title" readonly="@Model.ReadOnly" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Issue.Decription"></label>
+            <textarea class="form-control" asp-for="Issue.Decription" rows="4" readonly="@Model.ReadOnly"></textarea>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Issue.StatusId">Status</label>
+            <div>
+                <span asp-validation-for="Issue.StatusId" class="text-danger"></span>
+            </div>
+            <select asp-for="Issue.StatusId" class="form-control" disabled="@Model.ReadOnly"
+                    asp-items="@(new SelectList(Model.Statuses, "StatusId", "Name"))">
+                <option value="" disabled selected>Select Status</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Issue.PriorityId">Priority</label>
+            <div>
+                <span asp-validation-for="Issue.PriorityId" class="text-danger"></span>
+            </div>
+            <select asp-for="Issue.PriorityId" disabled="@Model.ReadOnly"
+                    class="form-control" asp-items="@(new SelectList(Model.Priorities, "PriorityId", "Name"))">
+                <option value="" disabled selected>Select Priority</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Issue.MemberId">Assign Issue to Someone</label>
+
+            <select asp-for="Issue.MemberId" disabled="@Model.ReadOnly"
+                    class="form-control" asp-items="@(new SelectList(Model.Members, "MemberID", "UserName"))">
+                <option value="" disabled selected>Assign Issue to Someone</option>
+            </select>
+        </div>
+        <input asp-for="Issue.DateCreated" hidden />
+        @if (Model.Action == "Edit")
+        {
+            <div class="form-group">
+                <label asp-for="Issue.DateClosed"></label>
+                <input class="form-control" asp-for="Issue.DateClosed" type="date" disabled="@Model.ReadOnly" />
+            </div>
+        }
+        <button type="submit" class="btn btn-@Model.Theme">@Model.Action</button>
+    </form>
+</div>

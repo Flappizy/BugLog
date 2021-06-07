@@ -1,0 +1,34 @@
+﻿@model MemberLoginModel
+
+@if (TempData["Message"] != null)
+{
+    <div class="text-danger">
+        <h6>@TempData["Message"]</h6>
+    </div>
+}
+
+<div class="shadow p-3 mb-5 bg-white rounded"><h4>Log In</h4></div>
+<section class="row d-flex justify-content-center col-12">
+    <div class="m-1 text-danger" asp-validation-summary="ModelOnly"></div>
+    <form method="post" class="py-5">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <div class="form-group">
+            <label>UserName</label>
+            <div>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <input class="form-control" asp-for="UserName" />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <div>
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <input asp-for="Password" type="password" class="form-control" />
+        </div>
+        <button class="btn bg-success text-white" type="submit">Log In</button>
+    </form>
+</section>
+<div class="row col-12">
+    <p class="col-12"><a class="btn btn-primary" asp-action="AcceptInvite">Register</a></p>
+</div>

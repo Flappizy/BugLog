@@ -1,0 +1,45 @@
+﻿@page "/register"
+@model RegisterModel
+
+<partial name="_Validate" />
+
+<div class="shadow p-3 mb-5 bg-white rounded"><h4>Register</h4></div>
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-success alert-dismissible" style="margin-top:20px">
+        <h6>@TempData["Message"]</h6>
+    </div>
+}
+<section class="row d-flex justify-content-center col-12">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <h1 class="h3 mb-3 font-weight-normal">Please create user</h1>
+        <div class="form-group">
+            <label asp-for="UserName"></label>
+            <div>
+                <span asp-validation-for="UserName" class="text-danger"></span>
+            </div>
+            <input asp-for="UserName" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <div>
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <input asp-for="Email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Password"></label>
+            <input asp-for="Password" type="password" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="ConfirmPassword"></label>
+            <input asp-for="ConfirmPassword" class="form-control" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Register</button>
+    </form>
+</section>
+<div class="row col-12">
+    <p class="col-12"><a class="btn btn-success" asp-page="Login">Login</a></p>
+</div>

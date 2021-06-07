@@ -1,0 +1,30 @@
+﻿@model MailInfo
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success alert-dismissible" style="margin-top:20px">
+        @ViewBag.Message
+    </div>
+}
+
+<div>
+    <h2 class="shadow text-capitalize text-center m-4">Invite a new Member</h2>
+    <form method="post" asp-action="SendInvite">
+        <div class="form-group">
+            <label asp-for="RecieverMail">Invitee Email</label>
+            <div>
+                <span asp-validation-for="RecieverMail" class="text-danger"></span>
+            </div>
+            <input class="form-control" asp-for="RecieverMail" />
+        </div>
+
+        <div class="form-group">
+            <label>Select Role</label>
+            <select asp-for="AssignedRole" class="form-control"
+                    asp-items="@(new SelectList(Model.Roles, "Name", "Name"))">
+                <option value="" disabled selected>Select Role</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Invite</button>
+    </form>
+</div>

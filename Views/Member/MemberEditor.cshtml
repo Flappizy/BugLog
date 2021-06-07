@@ -1,0 +1,36 @@
+﻿@model MemberViewModel
+
+<h5 class="bg-@Model.Theme text-white text-center p-2">@Model.Action Member</h5>
+
+<form method="post" asp-action="@Model.Action">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group">
+        <label asp-for="Member.MemberID"></label>
+        <input class="form-control" asp-for="Member.MemberID" readonly />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Member.UserName"></label>
+        <div>
+            <span asp-validation-for="Member.UserName" class="text-danger"></span>
+        </div>
+        <input asp-for="Member.UserName" class="form-control" readonly="@Model.ReadOnly" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Member.Email"></label>
+        <div>
+            <span asp-validation-for="Member.Email" class="text-danger"></span>
+        </div>
+        <input asp-for="Member.Email" class="form-control" readonly="@Model.ReadOnly" />
+    </div>
+
+    <div class="form-group">
+        <label>Select Role</label>
+        <select asp-for="Member.AssignedRole" class="form-control" disabled="@Model.ReadOnly"
+                asp-items="@(new SelectList(Model.Roles, "Name", "Name"))">
+            <option value="" disabled selected>Select Role</option>
+        </select>
+    </div>
+    <button type="submit" class="btn btn-@Model.Theme">@Model.Action</button>
+</form>

@@ -1,0 +1,15 @@
+﻿@model ProfileModel
+
+
+<div>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr><th>Name</th><td>@Model.AppUser.UserName</td></tr>
+            <tr><th>Email</th><td>@Model.AppUser.Email</td></tr>
+            @if (Model.Roles.Count() != 0)
+            {
+                <tr><th>Role</th><td>@Model.Roles.First()</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

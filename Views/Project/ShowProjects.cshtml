@@ -1,0 +1,49 @@
+﻿@model AppViewModel
+
+@if (Model.Projects == null)
+{
+    <h3>There is presently no project</h3>
+}
+else
+{
+    <h2 class="shadow text-capitalize text-center m-4">List of Projects</h2>
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-striped">
+            <tr>
+                <th></th>
+                <th>Name</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tbody>
+                @foreach (Project project in Model.Projects)
+                {
+                <tr>
+                    <th><i class="fas fa-tasks"></i></th>
+                    <td>@project.ProjectName</td>
+                    <td><a class="btn btn-outline-dark" asp-action="ShowProjectDetails" asp-route-id="@project.ProjectId">Details</a></td>
+                    <td><a class="btn btn-outline-danger" asp-action="DeleteProject" asp-controller="Project" asp-route-id="@project.ProjectId">Delete</a></td>
+                    @if (Model.AdminOrDevRoleVerification)
+                    {
+                        <td><a class="btn btn-outline-primary" asp-action="Create" asp-controller="Issue" asp-route-id="@project.ProjectId">Add Issue</a></td>
+                    }
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @if (Model.AdminRoleVerification)
+    {
+        <div class="m-auto">
+            <h4><a class="btn btn-outline-success" asp-page="/NewProject">Add Project</a></h4>
+        </div>
+    }
+
+
+<div class="text-center">
+    <div page-metadata="@Model.PageMetaData" page-action="ShowProjects" url-path="projectPage" page-classes-enabled="true"
+         page-class="btn" page-class-normal="btn-outline-dark"
+         page-class-selected="btn-primary" class="btn-group pull-right m-1"></div>
+</div>
+}

@@ -1,0 +1,28 @@
+﻿@model ProjectDto
+
+<div class="m-2">
+    <h5 class="bg-danger text-white text-center p-2">Delete Project</h5>
+    <form method="post" asp-action="DeleteProject" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="ProjectId"></label>
+            <div>
+                <span asp-validation-for="ProjectId" class="text-danger"></span>
+            </div>
+            <input class="form-control" asp-for="ProjectId" readonly />
+        </div>
+        <div class="form-group">
+            <label asp-for="ProjectName"></label>
+            <div>
+                <span asp-validation-for="ProjectName" class="text-danger"></span>
+            </div>
+            <input class="form-control" asp-for="ProjectName"  readonly/>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Description"></label>
+            <textarea class="form-control" asp-for="Description" rows="4" readonly></textarea>
+        </div>
+        <button type="submit" class="btn btn-danger">Delete</button>
+    </form>
+</div>

@@ -1,0 +1,41 @@
+﻿@model MemberViewModel
+
+<div>
+    <h3 class="shadow text-capitalize text-center m-4">
+        Member's Details
+    </h3>
+</div>
+<div>
+    <table class="table table-sm table-bordered table-striped">
+        <tbody>
+            <tr><th>Name</th><td>@Model.Member.UserName</td></tr>
+            <tr><th>Issue Project Name</th><td>@Model.Member.Email</td></tr>
+            <tr><th>Assigned Role</th><td>@Model.Member.AssignedRole</td></tr>
+        </tbody>
+    </table>
+</div>
+
+@if (Model.Issues.Count() == 0)
+{
+    <h4>@Model.Member.UserName is assigned no task</h4>
+}
+else 
+{
+<div>
+    <h4 class="bg-light text-capitalize text-center m-4">Tasks assigned to @Model.Member.UserName</h4>
+    <table class="table table-sm table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Issue Name</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Issue issue in Model.Issues)
+            {
+                <tr><td>@issue.Title</td><td><a class="btn btn-outline-dark" asp-action="Details" asp-controller="Issue" asp-route-id="@issue.IssueId">Details</a></td></tr>
+            }
+        </tbody>
+    </table>
+</div>
+}

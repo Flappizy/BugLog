@@ -1,0 +1,160 @@
+﻿@model IssueViewModel
+
+<div>
+    <h2 class="shadow text-capitalize text-center m-4">
+        Issue Details
+    </h2>
+</div>
+<div class="table-responsive">
+    <table class="table table-sm table-bordered table-striped">
+        <tbody>
+            <tr><th>Name</th><td>@Model.Issue.Title</td></tr>
+            <tr><th>Issue Project Name</th><td>@Model.Issue.Project.ProjectName</td></tr>
+            <tr><th>Status</th><td>@Model.Issue.StatusName</td></tr>
+            <tr><th>Priority</th><td>@Model.Issue.PriorityName</td></tr>
+            <tr><th>Description</th><td>@Model.Issue.Decription</td></tr>
+            @if (Model.Issue.MemberName != null)
+            {
+
+                <tr><th>Assignee</th><td>@Model.Issue.MemberName</td></tr>
+            }
+            else
+            {
+                <tr><th>Assignee</th><td>No one is assigned to this task</td></tr>
+            }
+            <tr><th>Date Created</th><td>@Model.Issue.DateCreated</td></tr>
+            @if (Model.Issue.DateClosed != null)
+            {
+                <tr><th>DateClosed</th><td>@Model.Issue.DateClosed</td></tr>
+            }
+            else
+            {
+                <tr><th>Date Closed</th><td>Issue not resolved</td></tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<section class="border border-dark rounded mt-2 mb-4">
+    <h3 class="shadow text-capitalize text-center">Comment Section</h3>
+    <div class=" container-fluid">
+        <div class="row">
+            @if (!Model.Issue.DateClosed.HasValue)
+            {
+                <form method="post" asp-action="Details">
+                    <div class="form-group col shadow">
+                        <label asp-for="Issue.Comment"></label>
+                        <input asp-for="Issue.Title" hidden />
+                        <input asp-for="Issue.ProjectId" hidden />
+                        <input asp-for="Issue.PriorityId" hidden />
+                        <input asp-for="Issue.StatusId" hidden />
+                        <input asp-for="Issue.MemberId" hidden />
+                        <input asp-for="Issue.IssueId" hidden />
+                        <input asp-for="Issue.Decription" hidden />
+                        <input asp-for="Issue.DateClosed" hidden />
+                        <input asp-for="Issue.DateCreated" hidden />
+                        <input asp-for="Issue.StatusName" hidden />
+                        <input asp-for="Issue.PriorityName" hidden />
+                        <input asp-for="Issue.Project" hidden />
+                        <textarea class="form-control" asp-for="Issue.Comment" rows="4"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-3">Comment</button>
+                </form>
+            }
+            @if (Model.Issue.Comments.Count() > 0)
+            {
+                <div class="col">
+                    <table class="table table-sm table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Comment</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Comment comment in Model.Issue.Comments)
+                            {
+                                <tr>
+                                    <td>@comment.statement</td>
+                                    <td>@comment.PersonNameComment</td>
+                                    <td>@comment.CommentDate</td>
+                                </tr>
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            }
+        </div>
+    </div>
+
+</section>
+
+@if (Model.Activities.Count() > 0)
+{
+    <div class="m-auto mt-3 table-responsive" >
+        <h3 class="text-center text-capitalize bg-light">Activity</h3>
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Operation</th>
+                    <th>Date of Operation</th>
+                    <th>Old Values</th>
+                    <th>New Values</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Audit audit in Model.Activities)
+                {
+                    <tr>
+                        <td>@audit.UserName</td>
+                        @if (audit.Operation == "Created")
+                        {
+                            <td>@audit.UserName has added @audit.EntityTableName (@audit.EntityName)</td>
+
+                        }
+                        @if (audit.Operation == "Updated")
+                        {
+                            <td>@audit.UserName has @audit.Operation @audit.EntityTableName (@audit.EntityName)</td>
+
+                        }
+                        @if (audit.Operation == "Deleted")
+                        {
+                            <td>@audit.UserName has deleted @audit.EntityTableName (@audit.EntityName)</td>
+
+                        }
+                        <td>@audit.Date</td>
+                        <td>
+                            @foreach (KeyValuePair<string, object> item in Model.AuditObject.OldValue)
+                            {
+                                @if (item.Key.EndsWith("Id"))
+                                {
+                                    continue;
+                                }
+                                <p>@item.Key = @item.Value<br /></p>
+                            }
+                        </td>
+                        <td>
+                            @foreach (KeyValuePair<string, object> item in Model.AuditObject.NewValue)
+                            {
+                                @if (item.Key.EndsWith("Id"))
+                                {
+                                    continue;
+                                }
+                                <p>@item.Key = @item.Value<br /></p>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <div page-metadata="@Model.PageMetaData" page-action="Details" url-path="pageNumber" page-classes-enabled="true"
+             page-class="btn" page-class-normal="btn-outline-dark"
+             page-class-selected="btn-primary" class="btn-group pull-right m-1"></div>
+    </div>
+}

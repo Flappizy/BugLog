@@ -1,0 +1,207 @@
+﻿@model AppViewModel
+
+<div class="shadow p-3 mb-5 bg-white rounded">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" asp-action="ShowProfile" asp-controller="Profile">Profile</a></li>
+            <li class="nav-item active"><a class="nav-link" asp-action="ShowProjects" asp-controller="Project">Projects</a></li>
+            <li class="nav-item active"><a class="nav-link" asp-action="ShowIssues" asp-controller="Issue">Issues</a></li>
+            <li class="nav-item active"><a class="nav-link" asp-action="ShowMembers" asp-controller="Member">Members</a></li>
+            @if (Model.AdminRoleVerification)
+            {
+                <li class="nav-item active"><a class="nav-link" asp-action="Invite" asp-controller="Mail">Invite</a></li>
+            }
+
+            <li class="nav-item active"><a class="nav-link" asp-action="ShowActivities" asp-controller="Activity">Activity</a></li>
+            <li class="nav-item active"><a class="nav-link" asp-page="/Account/Logout">SignOut</a></li>
+        </ul>
+    </nav>
+</div>
+
+
+<div class="container-xl">
+    <div class="shadow">
+        <div class="col shadow border border-dark rounded mb-3 table-responsive">
+            <h3 class="text-center text-capitalize bg-light m-3">Projects</h3>
+            @if (Model.Projects.Count() > 0)
+            {
+                <div style="overflow-x:auto">
+                    <table class="table table-sm table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Name</th>
+                                <th>Description</th>
+                                @if (Model.AdminRoleVerification)
+                                {
+                                    <th></th>
+                                    <th></th>
+                                }
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (Project project in Model.Projects)
+                            {
+                            <tr>
+                                <td><i class="fas fa-tasks"></i></td>
+                                <td>@project.ProjectName</td>
+                                <td>@project.Description</td>
+                                @if (Model.AdminRoleVerification)
+                                {
+                                    <td><a class="btn btn-outline-primary" asp-action="Create" asp-controller="Issue" asp-route-id="@project.ProjectId">Add Issue</a></td>
+                                    <td><a class="btn btn-outline-danger" asp-action="DeleteProject" asp-controller="Project" asp-route-id="@project.ProjectId">Delete</a></td>
+                                }
+                                <td><a class="btn btn-outline-dark" asp-action="ShowProjectDetails" asp-controller="Project" asp-route-id="@project.ProjectId">Details</a></td>
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p>You have added no projects</p>
+            }
+        </div>
+
+        <div class="col shadow border border-dark rounded mb-3 table-responsive">
+            <h3 class="text-center text-capitalize bg-light m-3">Issues</h3>
+            @if (Model.Issues.Count() > 0)
+            {
+                <table class="table table-sm table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Project Name</th>
+                            <th>Description</th>
+                            @if (Model.AdminOrDevRoleVerification)
+                            {
+                                <th></th>
+                            }
+                            @if (Model.AdminRoleVerification)
+                            {
+                                <th></th>
+                            }
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Issue issue in Model.Issues)
+                        {
+                        <tr>
+                            <th><i class="fas fa-bug"></i></th>
+                            <td>@issue.Title</td>
+                            <td>@issue.Project.ProjectName</td>
+                            <td>@issue.Decription</td>
+                            @if (Model.AdminOrDevRoleVerification)
+                            {
+                                <td><a class="btn btn-outline-warning" asp-action="Edit" asp-controller="Issue" asp-route-id="@issue.IssueId">Edit Issue</a></td>
+                            }
+                            @if (Model.AdminRoleVerification)
+                            {
+                                <td><a class="btn btn-outline-danger" asp-action="Delete" asp-controller="Issue" asp-route-id="@issue.IssueId">Delete</a></td>
+
+                            }
+                            <td><a class="btn btn-outline-dark" asp-action="Details" asp-controller="Issue" asp-route-id="@issue.IssueId">Details</a></td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>You have added no issue</p>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container-xl">
+    <div class="shadow">
+        <div class="col shadow border border-dark rounded mb-3 table-responsive">
+            <h3 class="text-center text-capitalize bg-light m-3">Activity</h3>
+            @if (Model.Activities.Count() > 0)
+            {
+                <table class="table table-sm table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Operation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Audit audit in Model.Activities)
+                        {
+                            <tr>
+                                <td>@audit.UserName</td>
+                                @if (audit.Operation == "Created")
+                                {
+                                    <td>@audit.UserName has <span class="btn btn-outline-success active">added</span> @audit.EntityTableName (@audit.EntityName)</td>
+
+                                }
+                                @if (audit.Operation == "Updated")
+                                {
+                                    <td>@audit.UserName has <span class="btn btn-outline-warning active">@audit.Operation</span>  @audit.EntityTableName (@audit.EntityName)</td>
+
+                                }
+                                @if (audit.Operation == "Deleted")
+                                {
+                                    <td>@audit.UserName has <span class="btn btn-outline-danger active">@audit.Operation</span> @audit.EntityTableName (@audit.EntityName)</td>
+
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>You have no activity</p>
+            }
+        </div>
+
+        <div class="m-auto col shadow border border-dark rounded table-responsive">
+            <h3 class="text-center text-capitalize bg-light m-3 ">Project Members</h3>
+            @if (Model.Members.Count() > 0)
+            {
+                <table class="table table-sm table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th>Role</th>
+                            @if (Model.AdminRoleVerification)
+                            {
+                                <th></th>
+                                <th></th>
+                            }
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (Member member in Model.Members)
+                        {
+                        <tr>
+                            <td><i class="fas fa-user"></i></td>
+                            <td>@member.UserName</td>
+                            <td>@member.AssignedRole</td>
+                            @if (Model.AdminRoleVerification)
+                            {
+                                <td><a class="btn btn-outline-warning" asp-action="Edit" asp-controller="Member" asp-route-id="@member.MemberID">Edit Member</a></td>
+                                <td><a class="btn btn-outline-danger" asp-action="Delete" asp-controller="Member" asp-route-id="@member.MemberID">Delete Member</a></td>
+                            }
+                            <td><a class="btn btn-outline-dark" asp-action="Details" asp-controller="Member" asp-route-id="@member.MemberID">Details</a></td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>You have added no members</p>
+            }
+        </div>
+    </div>
+</div>

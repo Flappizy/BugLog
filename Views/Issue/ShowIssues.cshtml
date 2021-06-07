@@ -1,0 +1,80 @@
+﻿@model ListOfIssuesViewModel
+
+@if (Model.Issues.Count() == 0)
+{
+    <h3>There is presently no Issue</h3>
+}
+else
+{
+    <h2 class="shadow text-capitalize text-center m-4">Issues</h2>
+    <div class="table-responsive-xl">
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>Title</td>
+                    <td>ProjectName</td>
+                    <td>Status</td>
+                    <td>Priority</td>
+                    <td>DateCreated</td>
+                    <td>DateClosed</td>
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Issue issue in Model.Issues)
+                {
+                <tr>
+                    <td><i class="fas fa-bug"></i></td>
+                    <td>@issue.Title</td>
+                    <td>@issue.Project.ProjectName</td>
+                    @if (issue.StatusName.Equals("Not Started"))
+                    {
+                        <td> <span class="btn btn-outline-light active">@issue.StatusName</span></td>
+                    }
+                    @if (issue.StatusName.Equals("In Progress"))
+                    {
+                        <td> <span class="btn btn-outline-primary active">@issue.StatusName</span></td>
+                    }
+                    @if (issue.StatusName.Equals("Closed"))
+                    {
+                        <td> <span class="btn btn-outline-success active">@issue.StatusName</span></td>
+                    }
+                    @if (issue.PriorityName.Equals("Major"))
+                    {
+                        <td> <span class="btn btn-outline-primary active">@issue.PriorityName</span></td>
+
+                    }
+                    @if (issue.PriorityName.Equals("Minor"))
+                    {
+                        <td><span class="btn btn-outline-light active">@issue.PriorityName</span></td>
+
+                    }
+                    @if (issue.PriorityName.Equals("Critical"))
+                    {
+                        <td> <span class="btn btn-outline-danger active">@issue.PriorityName</span></td>
+
+                    }
+                    <td>@issue.DateCreated.ToShortDateString()</td>
+                    <td>
+                        @if (issue.DateClosed == null)
+                        {
+                            <p>Issue not yet resolved</p>
+                        }
+                        else
+                        {
+                            @issue.DateClosed.Value.ToShortDateString()
+                        }
+                    </td>
+                    <td><a class="btn btn-outline-dark" asp-action="Details" asp-route-id="@issue.IssueId">Details</a></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="text-center">
+        <div page-metadata="@Model.PageMetaData" page-action="ShowIssues" url-path="pageNumber" page-classes-enabled="true"
+             page-class="btn" page-class-normal="btn-outline-dark"
+             page-class-selected="btn-primary" class="btn-group pull-right m-1"></div>
+    </div>
+}

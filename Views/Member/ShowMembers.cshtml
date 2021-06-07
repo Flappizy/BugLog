@@ -1,0 +1,50 @@
+﻿@model MemberViewModel
+
+@if (Model.Members.Count() == 0)
+{
+    <h3>There is presently no Member on this Project</h3>
+}
+else
+{
+    <h2 class="shadow text-capitalize text-center m-4">Project Members</h2>
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>UserName</td>
+                    <td>Email</td>
+                    <td>Assigned Role</td>
+                    @if (Model.AdminRoleVerification)
+                    {
+                        <td></td>
+                        <td></td>
+                    }
+                    <td></td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Member member in Model.Members)
+                {
+                <tr>
+                    <td><i class="fas fa-user"></i></td>
+                    <td>@member.UserName</td>
+                    <td>@member.Email</td>
+                    <td>@member.AssignedRole</td>
+                    @if (Model.AdminRoleVerification)
+                    {
+                        <td><a class="btn btn-outline-warning" asp-action="Edit" asp-controller="Member" asp-route-id="@member.MemberID">Edit Member</a></td>
+                        <td><a class="btn btn-outline-danger" asp-action="Delete" asp-controller="Member" asp-route-id="@member.MemberID">Delete Member</a></td>
+                    }
+                    <td><a class="btn btn-outline-dark" asp-action="Details" asp-controller="Member" asp-route-id="@member.MemberID">Details</a></td>
+                </tr>
+                }
+            </tbody>
+        </table>
+        <div class="text-center">
+            <div page-metadata="@Model.PageMetaData" page-action="ShowMembers" url-path="projectPage" page-classes-enabled="true"
+                 page-class="btn" page-class-normal="btn-outline-dark"
+                 page-class-selected="btn-primary" class="btn-group pull-right m-1"></div>
+        </div>
+    </div>
+}

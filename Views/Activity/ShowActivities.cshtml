@@ -1,0 +1,79 @@
+﻿@model AuditViewModel
+
+@if (Model.Audits.Count() == 0)
+{
+    <h3>There is presently no Activity</h3>
+}
+else
+{
+    <h2 class="shadow text-capitalize text-center m-4">Activities</h2>
+    <div class="table-responsive">
+        <table class="table table-sm table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Operation</th>
+                    <th>Date of Operation</th>
+                    <th>Old Values</th>
+                    <th>New Values</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Audit audit in Model.Audits)
+                {
+                    <tr>
+                        <td>@audit.UserName</td>
+                        @if (audit.Operation == "Created")
+                        {
+                            <td>@audit.UserName has added @audit.EntityTableName (@audit.EntityName)</td>
+
+                        }
+                        @if (audit.Operation == "Updated")
+                        {
+                            <td>@audit.UserName has @audit.Operation @audit.EntityTableName (@audit.EntityName)</td>
+
+                        }
+                        @if (audit.Operation == "Deleted")
+                        {
+                            <td>@audit.UserName has deleted @audit.EntityTableName (@audit.EntityName)</td>
+
+                        }
+                        <td>@audit.Date.ToShortDateString()</td>
+                        <td>
+                            @if (audit.Operation != "Deleted")
+                            {
+                                @foreach (KeyValuePair<string, object> item in Model.AuditObject.OldValue)
+                                {
+                                    @if (item.Key.EndsWith("Id"))
+                                    {
+                                        continue;
+                                    }
+                                    <p>@item.Key = @item.Value<br /></p>
+                                }
+                            }
+                        </td>
+                        <td>
+                            @if (audit.Operation != "Deleted")
+                            {
+                                @foreach (KeyValuePair<string, object> item in Model.AuditObject.NewValue)
+                                {
+                                    @if (item.Key.EndsWith("Id"))
+                                    {
+                                        continue;
+                                    }
+                                    <p>@item.Key = @item.Value<br /></p>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <div class="text-center">
+            <div page-metadata="@Model.PageMetaData" page-action="ShowActivities" url-path="pageNumber" page-classes-enabled="true"
+                 page-class="btn" page-class-normal="btn-outline-dark"
+                 page-class-selected="btn-primary" class="btn-group pull-right m-1"></div>
+        </div>
+    </div>
+}

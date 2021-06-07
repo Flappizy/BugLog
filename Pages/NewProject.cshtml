@@ -1,0 +1,23 @@
+﻿@page "pages/newproject"
+@model NewProjectModel
+
+<div class="m-2">
+    <h5 class="bg-primary text-white text-center p-2">Add Project</h5>
+    <form method="post" asp-page="/NewProject" novalidate>
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label asp-for="Project.ProjectName"></label>
+            <div>
+                <span asp-validation-for="Project.ProjectName" class="text-danger"></span>
+            </div>
+            <input class="form-control" asp-for="Project.ProjectName" />
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Project.Description"></label>
+            <textarea class="form-control" asp-for="Project.Description" rows="4"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
